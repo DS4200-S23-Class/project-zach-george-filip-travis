@@ -18,8 +18,30 @@
         <h2>Motivation</h2>
         TODO: Add motivation / use case here 
         <p>
-            
-            Provide an introduction/motivation for your project. Include the domain area your project addresses, the domain problem it seeks to solve, why solving this problem is important, and an overview of the use case for your tool.
+            Provide an introduction/motivation for your project. Include the domain area your 
+            project addresses, the domain problem it seeks to solve, why solving this problem is 
+            important, and an overview of the use case for your tool.
+        </p>
+        <p>
+            This project intends to, at a baseline, inform users' sports bets. Each sportsbook has 
+            different biases and odds that depend on a multitude of factors. With our visualization,
+            we will convey these biases in a concise and readable manner to allow users to quickly 
+            find the necessary information when they want to place a bet. Our information needs to 
+            be quickly accessible and digestible as betting odds are quickly changing. The three 
+            main goals of our visualization are: compare the general performance of user bets by 
+            sportsbook, compare specific bet performance across multiple sportsbooks, and to allow 
+            users to understand which sportsbook to use (in a more broad sense) for which sports. 
+            These domain goals are important to support as sportsbooks are very good at masking 
+            their biases and intentions as seen in the related work section of this paper.
+        </p>
+        <p>
+            Specifically, we are focusing on player and game odds for the NBA. Finding the right 
+            site to bet on is extremely difficult. With odds constantly changing and slight 
+            discrepancies between bookies locking in a bet with the best odds is nearly impossible. 
+            However, this does not have to be the case! By using a bet API, we can download, clean, 
+            and visualize bets across different betting sites. By creating a visualization to show 
+            what bookie to bet with sports betters can be comfortable knowing they got the best 
+            odds. There is a clear use case for this project: to beat the book.
         </p>
     </div>
 
@@ -31,6 +53,25 @@
         <a href="data/Sports_bets_NBA.ipynb">Notebook</a>
         <br>
         <a href="data/NBA_Bets_Today.csv">Data CSV</a>
+        <p>
+            The data is collected by <a href="https://the-odds-api.com/">the odds api</a>. It is 
+            currently set up to only pull today's games but the dataset could be expanded. It is 
+            unknown how they get it because after trying to webscape betting sites there is no way 
+            that is their solution. Many different betting sites offer paid API usage or have a 
+            minimum balance requirement to use their API so they probably just get it from that. 
+            However, regardless of how they get the data they have comprehensive betting data across
+            multiple sports and leagues that is up to date when I check the sites manually. It is 
+            strictly spreads and money line odds so there should be no bias as sport betting 
+            companies are trying to make money. There are often deals that different companies put 
+            out to get new bettors. One of the main reasons for this project is to find the best 
+            ones and exploit them. There are no missing values nor true outliers. After reading in 
+            the data using a Jupyter notebook, the data was cleaned using python before exporting it 
+            to a .csv. For the cleaning in Python, first the game column was split into home and 
+            away teams to avoid confusion, and then renamed the columns in accordance with home and 
+            away. Numerous duplicate columns were also deleted and renamed so they made more sense. 
+            Lastly, the data was grouped by game ID and then Bookie so bets are sorted by game and 
+            the bookies spread and ML bets are next to each other.
+        </p>
     </div>
 
     <div>
