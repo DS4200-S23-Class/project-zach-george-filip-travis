@@ -7,7 +7,7 @@ const PADDING = 15;
 
 let states = [];
 let sportsbooks = {}
-const filters = document.getElementById("filtering");
+const filters = document.getElementById("filterTable");
 const sportsByState = d3.csv("data/Bookie by State.csv").then((data) => {
   for (const book of data) {
     const bookName = book["Bookie "];
@@ -26,22 +26,22 @@ const sportsByState = d3.csv("data/Bookie by State.csv").then((data) => {
     box.setAttribute("name", s);
     box.setAttribute("value", s);
     box.setAttribute("onclick", "updateFilters()");
-    filters.appendChild(label);
-    filters.appendChild(box);
-    filters.appendChild(document.createElement("br"));
+    const row = filters.appendChild(document.createElement("tr"));
+    const labelCol = row.appendChild(document.createElement("td"));
+    const boxCol = row.appendChild(document.createElement("td"));
+    labelCol.appendChild(label);
+    boxCol.appendChild(box);
   });
 });
 
 function updateFilters() {
-  for (const child of filters.children) {
-    if (child.tagName === "INPUT") {
+  for (const child of filters.getElementsByTagName("input")) {
       if (child.checked) {
         if (!states.includes(child.name)) {
           states.push(child.name);
         }
       } else {
         states = states.filter((s) => s !== child.name);
-      }
     }
   }
   console.log(states);
