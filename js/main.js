@@ -26,6 +26,7 @@ const sportsByState = d3.csv("data/Bookie by State.csv").then((data) => {
     box.setAttribute("name", s);
     box.setAttribute("value", s);
     box.setAttribute("onclick", "updateFilters()");
+    box.setAttribute("checked", "true");
     const row = filters.appendChild(document.createElement("tr"));
     const labelCol = row.appendChild(document.createElement("td"));
     const boxCol = row.appendChild(document.createElement("td"));
@@ -39,6 +40,7 @@ function updateFilters() {
       if (child.checked) {
         if (!states.includes(child.name)) {
           states.push(child.name);
+          states = states.sort();
         }
       } else {
         states = states.filter((s) => s !== child.name);
