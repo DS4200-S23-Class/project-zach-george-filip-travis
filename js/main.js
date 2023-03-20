@@ -9,13 +9,13 @@ let states = [];
 let sportsbooks = {}
 const filters = document.getElementById("filterTable");
 const sportsByState = d3.csv("data/Bookie by State.csv").then((data) => {
+  console.log(data);
   for (const book of data) {
     const bookName = book["Bookie "];
     const bookStates = book["States"].split(" ");
     sportsbooks[bookName] = bookStates;
     states = [...new Set([...states, ...bookStates])].sort();
   }
-  console.log(states);
   states.forEach((s) => {
     let label = document.createElement("label");
     label.setAttribute("for", s);
@@ -44,7 +44,6 @@ function updateFilters() {
         states = states.filter((s) => s !== child.name);
     }
   }
-  console.log(states);
 }
 
 const FRAME1 = d3
