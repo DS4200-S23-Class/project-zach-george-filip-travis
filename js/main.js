@@ -6,41 +6,7 @@ const VIS_HEIGHT = FRAME_HEIGHT - MARGINS.top - MARGINS.bottom;
 const PADDING = 15;
 
 let states = [];
-
-const FRAME1 = d3
-  .select("#vis1")
-  .append("svg")
-  .attr("height", FRAME_HEIGHT)
-  .attr("width", FRAME_WIDTH)
-  .attr("class", "frame");
-
-const FRAME2 = d3
-  .select("#vis2")
-  .append("svg")
-  .attr("height", FRAME_HEIGHT)
-  .attr("width", FRAME_WIDTH)
-  .attr("class", "frame");
-
-d3.csv("data/NBA_Bets_Today.csv").then((data) => {
-  console.log(data);
-});
-
 const filters = document.getElementById("filtering");
-
-function updateFilters() {
-  for (const child of filters.children) {
-    if (child.tagName === 'INPUT') {
-      if (child.checked) {
-        if (!states.includes(child.name)) {
-          states.push(child.name);
-        }
-      } else {
-        states = states.filter(s => s !== child.name);
-      }
-    }
-  }
-  console.log(states);
-}
 
 // get list of states from data, remove duplicates, sort
 /*
@@ -59,3 +25,36 @@ function updateFilters() {
     filters.appendChild(document.createElement('br'));
   })
 */
+
+function updateFilters() {
+  for (const child of filters.children) {
+    if (child.tagName === "INPUT") {
+      if (child.checked) {
+        if (!states.includes(child.name)) {
+          states.push(child.name);
+        }
+      } else {
+        states = states.filter((s) => s !== child.name);
+      }
+    }
+  }
+  console.log(states);
+}
+
+const FRAME1 = d3
+  .select("#vis1")
+  .append("svg")
+  .attr("height", FRAME_HEIGHT)
+  .attr("width", FRAME_WIDTH)
+  .attr("class", "frame");
+
+const FRAME2 = d3
+  .select("#vis2")
+  .append("svg")
+  .attr("height", FRAME_HEIGHT)
+  .attr("width", FRAME_WIDTH)
+  .attr("class", "frame");
+
+d3.csv("data/NBA_Bets_Today.csv").then((data) => {
+  console.log(data);
+});
