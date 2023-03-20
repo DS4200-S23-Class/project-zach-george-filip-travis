@@ -6,25 +6,31 @@ const VIS_HEIGHT = FRAME_HEIGHT - MARGINS.top - MARGINS.bottom;
 const PADDING = 15;
 
 let states = [];
+let sportsbooks = {}
 const filters = document.getElementById("filtering");
-
-// get list of states from data, remove duplicates, sort
-/*
-  states.forEach(s => {
-    let label = document.createElement('label');
-    label.setAttribute('for', s);
+const sportsByState = d3.csv("data/Bookie by State.csv").then((data) => {
+  for (const book of data) {
+    const bookName = book["Bookie "];
+    const bookStates = book["States"].split(" ");
+    sportsbooks[bookName] = bookStates;
+    states = [...new Set([...states, ...bookStates])].sort();
+  }
+  console.log(states);
+  states.forEach((s) => {
+    let label = document.createElement("label");
+    label.setAttribute("for", s);
+    label.innerText = s;
     let box = document.createElement("input");
-    box.setAttribute('type', 'checkbox');
-    box.setAttribute('id', s);
-    box.setAttribute('name', s);
-    box.setAttribute('value', s);
-    box.setAttribute('onclick', 'update()');
-    // <label for="ma">MA</label>
+    box.setAttribute("type", "checkbox");
+    box.setAttribute("id", s);
+    box.setAttribute("name", s);
+    box.setAttribute("value", s);
+    box.setAttribute("onclick", "updateFilters()");
     filters.appendChild(label);
     filters.appendChild(box);
-    filters.appendChild(document.createElement('br'));
-  })
-*/
+    filters.appendChild(document.createElement("br"));
+  });
+});
 
 function updateFilters() {
   for (const child of filters.children) {
