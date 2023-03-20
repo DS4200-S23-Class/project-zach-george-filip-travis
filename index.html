@@ -79,13 +79,31 @@
         TODO: Build your visualization tool here
         <div id="visualizations">
             <div id="vis1"></div>
+            <div>
+                <form id="filtering">
+                    <label for="ma">MA</label>
+                    <input type="checkbox" id="ma" name="ma" onclick="updateFilters()"><br>
+                    <label for="md">MD</label>
+                    <input type="checkbox" id="md" name="md" onclick="updateFilters()">
+                </form>
+            </div>
             <div id="vis2"></div>
         </div>  
     </div>
 
     <div>
         <h2>Acknowledgements</h2>
-        TODO: Cite resources used here   
+        <ul>
+            <li>
+                <a href="https://stackoverflow.com/questions/3954438/how-to-remove-item-from-array-by-value">Remove items from array by value</a>
+            </li>
+            <li>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/children">Access element children</a>
+            </li>
+            <li>
+                <a href="https://www.w3schools.com/html/html_forms.asp">HTML forms</a>
+            </li>
+        </ul> 
     </div>
     <script src="js/main.js"></script>
 </body>
