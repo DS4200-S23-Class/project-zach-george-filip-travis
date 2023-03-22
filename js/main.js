@@ -152,7 +152,7 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
   // highlight on mouseover
   FRAME1.selectAll(".circ").on("mousemove", function (i, d) {
     tooltips
-      .html(d.home_team + " @ " + d.away_team + ": " + d.point_spread_home)
+      .html(d.home_team + " @ " + d.away_team + ": " + d.point_spread_home + "<br>" + d.site_title)
       .style("left", i.pageX + 13 + "px")
       .style("top", i.pageY - 13 + "px");
   });
