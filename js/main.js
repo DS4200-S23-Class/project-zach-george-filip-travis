@@ -86,8 +86,8 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
 
   let colors_1 = d3.scaleOrdinal().domain(bookies).range(d3.schemePaired);
 
-  // decide which variable size of circles (currently away point spread, want to change this to amount of money already spent by other users on this bet maybe?
-  // or amount of people?)
+  // decide which variable size of circles represents (currently is away point spread, change this to amount of money already spent by other users on this bet maybe?
+  // or amount of users?)
   let circ_size_domain = d3.extent(data.map((d) => + d["point_spread_away"]));
   // size the circles
   let circ_size = d3.scaleSqrt().domain(circ_size_domain).range([2, 5]);
@@ -107,17 +107,15 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
     .on("mouseover", function (d, i) {
       d3.select(this).transition()
         .duration('100')
-        .attr("stroke-width", 2)
-
+        .attr("stroke-width", 2);
         // tooltip appear
         tooltips.transition()
           .duration(100)
-          .style("opacity", 1)
-
+          .style("opacity", 1);
         // insert data into tooltip
-        tooltips.html(d.point_spread_home)
-          .style("left", (d.pageX + 3) + "px")
-          .style("top", (d3.pageY - 3) + "px");
+        tooltips.html(d.home_team + " @ " + d.away_team + ": " + d.point_spread_home)
+          .style("left", (d.pageX + 13) + "px")
+          .style("top", (d.pageY - 13) + "px");
     })
 
     // end highlight on mouseout
@@ -125,28 +123,28 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
       d3.select(this).transition()
         .duration("100")
         .attr("stroke-width", 1)
-
       // tooltip disappear
       tooltips.transition()
-        .duration("100")
+        .duration("150")
         .attr("opacity", 0);
     });
+ 
 
   let sim = d3.forceSimulation(data)
     .force("x", d3.forceX((d) => {
       return x_scale(d.site_title);
-    }).strength(0.2))
+    }).strength(0.4))
 
     .force("y", d3.forceY((d) => {
       return y_scale(d.point_spread_home);
-    }).strength(5))
+    }).strength(1))
 
     .force("collide", d3.forceCollide((d) => {
       return circ_size(d["point_spread_away"]);
     }))
 
     .alphaDecay(0)
-    .alpha(0.3)
+    .alpha(0.2)
     .on("tick", tick);
 
   // updates location of circles each tick

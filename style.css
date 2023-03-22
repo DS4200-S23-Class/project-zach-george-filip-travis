@@ -12,13 +12,13 @@ h1 {
     justify-content: space-around;
 }
 
-#ttip_1 {
+div.ttip_1 {
      position: absolute;
      text-align: center;
      padding: .2rem;
      background: #313639;
-     color: #f9f9f9;
-     border: 1px;
+     color: white;
+     border: 0px;
      border-radius: 8px;
      pointer-events: none;
      font-size: .7rem;
