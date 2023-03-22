@@ -62,43 +62,106 @@ const FRAME2 = d3
   .attr("width", FRAME_WIDTH)
   .attr("class", "frame");
 
-let svg1 = d3
+var tooltips = d3
   .select("body")
-  .append("svg")
-  .attr("height", VIS_HEIGHT)
-  .attr("width", VIS_WIDTH);
+  .append("div")
+  .attr("class", "ttip_1")
+  .style("opacity", 0);
+
 
 d3.csv("data/NBA_Bets_Today.csv").then((data) => {
   console.log(data);
 
+  // vis1 start
   let bookies = Array.from(new Set(data.map((d) => d.site_title)));
   let x_scale = d3
     .scaleBand()
     .domain(bookies)
-    .range([0, VIS_WIDTH]);
+    .range([2 * PADDING, VIS_WIDTH]);
 
   let y_scale = d3
     .scaleLinear()
-    .domain(d3.extent(data.map((d) => + d["price_away"])))
+    .domain(d3.extent(data.map((d) => + d["point_spread_home"])))
     .range([VIS_HEIGHT - MARGINS.top, MARGINS.top]);
 
   let colors_1 = d3.scaleOrdinal().domain(bookies).range(d3.schemePaired);
-
 
   // decide which variable size of circles (currently away point spread, want to change this to amount of money already spent by other users on this bet maybe?
   // or amount of people?)
   let circ_size_domain = d3.extent(data.map((d) => + d["point_spread_away"]));
   // size the circles
-  let circ_size = d3.scaleSqrt().domain(circ_size_domain).range([2, 50]);
+  let circ_size = d3.scaleSqrt().domain(circ_size_domain).range([2, 5]);
 
-  svg1.selectAll(".circ")
+  FRAME1.selectAll(".circ")
     .data(data)
     .enter()
     .append("circle")
     .attr("class", "circ")
     .attr("stroke", "black")
-    .attr("fill", (d) => color(d.site_title))
-    .attr("r", (d) => size(d["point_spread_away"]))
+    .attr("fill", (d) => colors_1(d.site_title))
+    .attr("r", (d) => circ_size(d["point_spread_away"]))
     .attr("cx", (d) => x_scale(d.site_title))
-    .attr("cy", (d) => y_scale(d.price_away));
+    .attr("cy", (d) => y_scale(d.point_spread_home))
+
+    // highlight on mouseover
+    .on("mouseover", function (d, i) {
+      d3.select(this).transition()
+        .duration('100')
+        .attr("stroke-width", 2)
+
+        // tooltip appear
+        tooltips.transition()
+          .duration(100)
+          .style("opacity", 1)
+
+        // insert data into tooltip
+        tooltips.html(d.point_spread_home)
+          .style("left", (d.pageX + 3) + "px")
+          .style("top", (d3.pageY - 3) + "px");
+    })
+
+    // end highlight on mouseout
+    .on("mouseout", function (d, i) {
+      d3.select(this).transition()
+        .duration("100")
+        .attr("stroke-width", 1)
+
+      // tooltip disappear
+      tooltips.transition()
+        .duration("100")
+        .attr("opacity", 0);
+    });
+
+  let sim = d3.forceSimulation(data)
+    .force("x", d3.forceX((d) => {
+      return x_scale(d.site_title);
+    }).strength(0.2))
+
+    .force("y", d3.forceY((d) => {
+      return y_scale(d.point_spread_home);
+    }).strength(5))
+
+    .force("collide", d3.forceCollide((d) => {
+      return circ_size(d["point_spread_away"]);
+    }))
+
+    .alphaDecay(0)
+    .alpha(0.3)
+    .on("tick", tick);
+
+  // updates location of circles each tick
+  function tick() {
+    d3.selectAll(".circ")
+      .attr("cx", (d) => d.x)
+      .attr("cy", (d) => d.y);
+    }
+
+  // applies force decay after 3 seconds
+  let decay_init = setTimeout(function () {
+    console.log("alpha decay begins");
+    sim.alphaDecay(0.1);
+  }, 3000);
+
+
+  // vis2 start
 });
