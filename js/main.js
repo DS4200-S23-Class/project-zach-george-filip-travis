@@ -132,8 +132,6 @@ d3.csv("data/NBA_Bets_Today.csv").then(
         console.log("alpha decay begins");
         sim.alphaDecay(0.1);
       }, 3000);
-
-      d3.select('#vis2').append("p").html("Graph will appear here when point in vis1 is clicked, to be added");
     }
 
     plotData(data);
