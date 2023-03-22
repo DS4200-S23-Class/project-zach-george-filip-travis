@@ -23,3 +23,16 @@ div.ttip_1 {
     pointer-events: none;
     font-size: .7rem;
 }
+
+#vis1 .top g text {
+    text-anchor: end;
+    transform: rotate(90deg) translate(-10px, 10px)
+}
+
+.y-label {
+    transform: rotate(-90deg) translateX(-450px);
+}
+
+.x-label {
+    transform: translateY(15px);
+}

@@ -79,29 +79,27 @@ d3.csv("data/NBA_Bets_Today.csv").then(
       // size the circles
       let circ_size = d3.scaleSqrt().domain(circ_size_domain).range([2, 5]);
 
-      let vis_1 = FRAME1
+      FRAME1
         .append("g")
           .attr("transform", function (d, i) {
-            return "translate(0,40)"
+            return `translate(0,125)`
           })
-          .attr("class", "top")
-        .append("g")
-          .attr("transform", function (d, i) {
-          return "translate(40,-35)"
-          })
-          .attr("class", "left")
-        .append("text")
-          .attr("class", "x label")
+          .attr("class", "top");
+      FRAME1.append("g")
+        .attr("transform", function (d, i) {
+          return `translate(${MARGINS.left}, ${MARGINS.top})`;
+        })
+        .attr("class", "left");
+        FRAME1.append("text")
+          .attr("class", "x-label")
           .attr("text-anchor", "middle")
           .attr("x", (VIS_WIDTH + MARGINS.left) / 2)
           .attr("y", 0)
-          .text("sportsbooks")
-        .append("text")
-          .attr("class", "y label")
-          .attr("text-anchor", "middle")
+          .text("sportsbooks");
+        FRAME1.append("text")
+          .attr("class", "y-label")
           .attr("y", 0)
           .attr("dy", ".75em")
-          .attr("transform", "rotate(-90)")
           .text("distance from expected value (by odds)");
 
       // add axes
@@ -123,7 +121,7 @@ d3.csv("data/NBA_Bets_Today.csv").then(
         .attr("fill", (d) => colors_1(d.site_title))
         .attr("r", (d) => circ_size(d["point_spread_away"]))
         .attr("cx", (d) => x_scale(d.site_title))
-        .attr("cy", (d) => y_scale(d.point_spread_home));
+        .attr("cy", (d) => y_scale(d.point_spread_home) + MARGINS.top);
 
       let sim = d3
         .forceSimulation(betData)
@@ -160,7 +158,7 @@ d3.csv("data/NBA_Bets_Today.csv").then(
       function tick() {
         d3.selectAll(".circ")
           .attr("cx", (d) => d.x)
-          .attr("cy", (d) => d.y);
+          .attr("cy", (d) => d.y + MARGINS.top);
       }
 
       // applies force decay after 3 seconds
