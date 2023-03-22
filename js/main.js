@@ -132,6 +132,21 @@ d3.csv("data/NBA_Bets_Today.csv").then(
         console.log("alpha decay begins");
         sim.alphaDecay(0.1);
       }, 3000);
+
+      FRAME2.append("g")
+        .attr(
+          "transform",
+          "translate(" + MARGINS.left + "," + (VIS_HEIGHT + MARGINS.top) + ")"
+        )
+        .call(d3.axisBottom(x_scale).ticks(5))
+        .attr("font-size", 12);
+
+      FRAME2.append("g")
+        .attr("transform", `translate( ${MARGINS.bottom}, ${MARGINS.left})`)
+        .call(d3.axisLeft(y_scale).ticks(5))
+        .attr("font-size", 12);
+      
+      d3.select('#vis2').append("p").html("Graph will appear here when point in vis1 is clicked, to be added");
     }
 
     plotData(data);
@@ -198,5 +213,4 @@ d3.csv("data/NBA_Bets_Today.csv").then(
       plotData(filteredData);
     }
   }
-  // vis2 start
 );
