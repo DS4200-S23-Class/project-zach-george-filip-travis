@@ -25,6 +25,7 @@ d3.csv("data/NBA_Bets_Today.csv").then(
     let states = [];
     let sportsbooks = {};
 
+    // note: since there are some sportsbooks that are in every state, unchecking a state may not change the graph
     const filters = document.getElementById("filterTable");
     d3.csv("data/Bookie by State.csv").then((stateData) => {
       console.log(stateData);
@@ -78,7 +79,7 @@ d3.csv("data/NBA_Bets_Today.csv").then(
       // size the circles
       let circ_size = d3.scaleSqrt().domain(circ_size_domain).range([2, 5]);
 
-      var vis_1 = FRAME1
+      let vis_1 = FRAME1
         .append("g")
           .attr("transform", function (d, i) {
             return "translate(0,40)"
