@@ -214,3 +214,45 @@ d3.csv("data/NBA_Bets_Today.csv").then(
     }
   }
 );
+
+// vis2 start
+function build_bar_chart() {
+  //Open csv
+  d3.csv("data/NBA_Bets_Today.csv").then((data) => {
+  
+      const X_SCALE2 = d3.scaleBand()
+                             .range([0, VIS_WIDTH])
+                             .domain(data.map((d) => {return d.site_title;}))
+                             .padding(.3);
+  
+      const Y_SCALE2 = d3.scaleLinear()
+                             .range([VIS_HEIGHT, 0])
+                             .domain([0,60]);
+  
+  //Add X-Axis 
+  FRAME2.append("g") 
+      .attr("transform", "translate(" + MARGINS.left + "," + 
+                  (VIS_HEIGHT + MARGINS.top) + ")") 
+      .call(d3.axisBottom(X_SCALE2))
+      .attr("font-size", '20px'); 
+  
+  //Add Y-Axis
+  FRAME2.append("g")
+      .attr("transform", 
+                  "translate(" + MARGINS.left + "," + (MARGINS.bottom) + ")")
+      .call(d3.axisLeft(Y_SCALE2).ticks(2))
+      .attr("font-size", "20px");
+  
+  
+  //Add bars
+  bars =  FRAME2.selectAll(".bar")
+      .data(data)
+      .enter()
+      .append("rect")
+      .attr("x", (d) => { return (X_SCALE2(d.site_title) + MARGINS.left); }) 
+      .attr("width", X_SCALE2.bandwidth())
+      .attr("y", (d) => {return Y_SCALE2(50) + MARGINS.top})
+      .attr("height", (d) => {return VIS_HEIGHT - Y_SCALE2(50)})
+})};
+
+build_bar_chart();
