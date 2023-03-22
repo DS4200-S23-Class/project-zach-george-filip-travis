@@ -61,12 +61,12 @@ d3.csv("data/NBA_Bets_Today.csv").then(
       let x_scale = d3
         .scaleBand()
         .domain(bookies)
-        .range([2 * PADDING, VIS_WIDTH]);
+        .range([MARGINS.left + 40, VIS_WIDTH + MARGINS.left + 40]);
 
       let y_scale = d3
         .scaleLinear()
         .domain(d3.extent(betData.map((d) => +d["point_spread_home"])))
-        .range([VIS_HEIGHT - MARGINS.top, MARGINS.top]);
+        .range([VIS_HEIGHT - MARGINS.top + 40, MARGINS.top + 40]);
 
       let colors_1 = d3.scaleOrdinal().domain(bookies).range(d3.schemePaired);
 
@@ -77,6 +77,41 @@ d3.csv("data/NBA_Bets_Today.csv").then(
       );
       // size the circles
       let circ_size = d3.scaleSqrt().domain(circ_size_domain).range([2, 5]);
+
+      var vis_1 = FRAME1
+        .append("g")
+          .attr("transform", function (d, i) {
+            return "translate(0,40)"
+          })
+          .attr("class", "top")
+        .append("g")
+          .attr("transform", function (d, i) {
+          return "translate(40,-35)"
+          })
+          .attr("class", "left")
+        .append("text")
+          .attr("class", "x label")
+          .attr("text-anchor", "middle")
+          .attr("x", (VIS_WIDTH + MARGINS.left) / 2)
+          .attr("y", 0)
+          .text("sportsbooks")
+        .append("text")
+          .attr("class", "y label")
+          .attr("text-anchor", "middle")
+          .attr("y", 0)
+          .attr("dy", ".75em")
+          .attr("transform", "rotate(-90)")
+          .text("distance from expected value (by odds)");
+
+      // add axes
+      let x_axis = d3
+      .axisTop(x_scale);
+
+      let y_axis = d3
+      .axisLeft(y_scale);
+
+      d3.select(".top").call(x_axis);
+      d3.select(".left").call(y_axis);
 
       FRAME1.selectAll(".circ")
         .data(betData)
