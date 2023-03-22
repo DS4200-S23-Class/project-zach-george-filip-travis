@@ -166,47 +166,47 @@ d3.csv("data/NBA_Bets_Today.csv").then(
         console.log("alpha decay begins");
         sim.alphaDecay(0.1);
       }, 3000);
+
+      const tooltips = d3
+        .select("#vis1")
+        .append("div")
+        .attr("class", "ttip_1")
+        .style("opacity", 0);
+
+      FRAME1.selectAll(".circ").on("mouseover", function (i, d) {
+        // d3.select(this).transition().duration("100").attr("stroke-width", 2);
+        // // tooltip appear
+        // tooltips.transition().duration(100).style("opacity", 1);
+        // insert data into tooltip
+        tooltips.style("opacity", 1);
+      });
+
+      // highlight on mouseover
+      FRAME1.selectAll(".circ").on("mousemove", function (i, d) {
+        tooltips
+          .html(
+            d.home_team +
+              " @ " +
+              d.away_team +
+              ": " +
+              d.point_spread_home +
+              "<br>" +
+              d.site_title
+          )
+          .style("left", i.pageX + 13 + "px")
+          .style("top", i.pageY - 13 + "px");
+      });
+
+      // end highlight on mouseout
+      FRAME1.selectAll(".circ").on("mouseleave", function (i, d) {
+        // d3.select(this).transition().duration("100").attr("stroke-width", 1);
+        // // tooltip disappear
+        // tooltips.transition().duration("150").attr("opacity", 0);
+        tooltips.style("opacity", 0);
+      });
     }
 
     plotData(data);
-
-    const tooltips = d3
-      .select("#vis1")
-      .append("div")
-      .attr("class", "ttip_1")
-      .style("opacity", 0);
-
-    FRAME1.selectAll(".circ").on("mouseover", function (i, d) {
-      // d3.select(this).transition().duration("100").attr("stroke-width", 2);
-      // // tooltip appear
-      // tooltips.transition().duration(100).style("opacity", 1);
-      // insert data into tooltip
-      tooltips.style("opacity", 1);
-    });
-
-    // highlight on mouseover
-    FRAME1.selectAll(".circ").on("mousemove", function (i, d) {
-      tooltips
-        .html(
-          d.home_team +
-            " @ " +
-            d.away_team +
-            ": " +
-            d.point_spread_home +
-            "<br>" +
-            d.site_title
-        )
-        .style("left", i.pageX + 13 + "px")
-        .style("top", i.pageY - 13 + "px");
-    });
-
-    // end highlight on mouseout
-    FRAME1.selectAll(".circ").on("mouseleave", function (i, d) {
-      // d3.select(this).transition().duration("100").attr("stroke-width", 1);
-      // // tooltip disappear
-      // tooltips.transition().duration("150").attr("opacity", 0);
-      tooltips.style("opacity", 0);
-    });
 
     function updateFilters() {
       for (const child of filters.getElementsByTagName("input")) {
