@@ -223,19 +223,19 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
         },
       ];
       const point = d3.select(this);
+      const svg = d3.select("#vis2");
+      svg.selectAll(".tick").remove();
+      svg.selectAll("rect").remove();
       if (JSON.stringify(selected) === JSON.stringify(selectedData)) {
         selectedData.forEach((d) => {
           d.value = 0;
         });
         point.attr("class", "circ");
         FRAME1.selectAll(".unselected").attr("class", "circ");
-        const svg = d3.select("#vis2");
-        svg.selectAll(".tick").remove();
-        svg.selectAll("rect").remove();
       } else {
         selectedData = selected;
+        FRAME1.selectAll(".circ").attr("class", "unselected circ");
         point.attr("class", "selected circ");
-        FRAME1.selectAll(".circ:not(.selected)").attr("class", "unselected circ");
         plotBars();
       }
     });
