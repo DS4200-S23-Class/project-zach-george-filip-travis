@@ -226,7 +226,7 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
       const svg = d3.select("#vis2");
       svg.selectAll(".tick").remove();
       svg.selectAll("rect").remove();
-      if (JSON.stringify(selected) === JSON.stringify(selectedData)) {
+      if (point.attr("class") === "selected circ") {
         selectedData.forEach((d) => {
           d.value = 0;
         });
