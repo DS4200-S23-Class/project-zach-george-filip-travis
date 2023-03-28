@@ -55,6 +55,20 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
     });
   });
 
+  document.getElementById("uncheck").addEventListener("click", () => {
+    for (const child of filters.getElementsByTagName("input")) {
+      child.checked = false;
+    }
+    updateFilters();
+  });
+
+  document.getElementById("check").addEventListener("click", () => {
+    for (const child of filters.getElementsByTagName("input")) {
+      child.checked = true;
+    } 
+    updateFilters();
+  });
+
   function plotData(betData) {
     console.log(betData);
 
