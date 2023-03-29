@@ -226,7 +226,7 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
     const title = FRAME2.append("g")
       .attr("class", "title")
       .style("transform", "translate(250px, 20px)")
-      .attr("font-size", "12px");
+      .attr("font-size", "15px");
     
     title.append("text").html("Point Spread and Price").attr("text-anchor", "middle");
     

@@ -10,6 +10,7 @@ h1 {
 #visualizations {
     display: flex;
     justify-content: space-around;
+    align-items: center;
 }
 
 div.ttip_1 {
@@ -60,6 +61,14 @@ div.ttip_1 {
 
 #check {
     margin-bottom: 5px;
+}
+
+#vis1, #vis2 {
+    width: 40%;
+}
+
+#form {
+    width: 20%;
 }
 
 #vis2 {
