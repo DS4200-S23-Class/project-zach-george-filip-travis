@@ -434,6 +434,7 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
     }
     const svg = d3.select("#vis1");
     svg.selectAll("circle").remove();
+    FRAME2.selectAll("text").remove();
     plotData(filteredData);
   }
 });
