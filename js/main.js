@@ -220,7 +220,20 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
     const directions = FRAME2.append("text")
       .html("Click on a point on the left to display the graph here")
       .style("transform", "translate(100px, 100px)")
-      .attr("class", "directions");
+      .attr("class", "directions")
+      .style("font-size", "12px");
+
+    const title = FRAME2.append("g")
+      .attr("class", "title")
+      .style("transform", "translate(250px, 20px)")
+      .attr("font-size", "12px");
+    
+    title.append("text").html("Point Spread and Price").attr("text-anchor", "middle");
+    
+    const specificTitle = title.append("text")
+      .attr("class", "specific-title")
+      .attr("text-anchor", "middle")
+      .style("transform", "translateY(20px)");
 
     FRAME1.selectAll(".circ").on("click", function (i, d) {
       const selected = [
@@ -256,11 +269,13 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
         point.attr("class", "circ");
         FRAME1.selectAll(".unselected").attr("class", "circ");
         directions.style("display", "block");
+        specificTitle.html("");
       } else {
         selectedData = selected;
         FRAME1.selectAll(".circ").attr("class", "unselected circ");
         point.attr("class", "selected circ");
         directions.style("display", "none");
+        specificTitle.html(`${d.home_team} @ ${d.away_team}, ${d.site_title}`)
         plotBars();
       }
     });
@@ -299,7 +314,7 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
         .enter()
         .append("rect")
         .attr("y", function (d) {
-          return Y_SCALE2(Math.max(0, d.value))// + MARGINS.bottom;
+          return Y_SCALE2(Math.max(0, d.value)) + MARGINS.bottom;
         })
         .attr("x", function (d) {
           return X_SCALE2(d.title) + MARGINS.left;
@@ -317,7 +332,7 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
       FRAME2.append("g")
         .attr(
           "transform",
-          "translate(" + MARGINS.left + "," + (VIS_HEIGHT) + ")"
+          "translate(" + MARGINS.left + "," + (VIS_HEIGHT + MARGINS.bottom) + ")"
         )
         .call(d3.axisBottom(X_SCALE2))
         .attr("font-size", "10px");
@@ -326,7 +341,7 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
       FRAME2.append("g")
         .attr(
           "transform",
-          "translate(" + MARGINS.left + "," + 0 + ")"
+          "translate(" + MARGINS.left + "," + MARGINS.bottom + ")"
         )
         .call(d3.axisLeft(Y_SCALE2))
         .attr("font-size", "15px");
@@ -365,8 +380,8 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
 
       const middleLine = d3.line();
       const points = [
-        [MARGINS.left, VIS_HEIGHT / 2],
-        [VIS_WIDTH + MARGINS.right, VIS_HEIGHT / 2],
+        [MARGINS.left, VIS_HEIGHT / 2 + MARGINS.top],
+        [VIS_WIDTH + MARGINS.right, VIS_HEIGHT / 2 + MARGINS.top],
       ];
 
       const pathOfLine = middleLine(points);
