@@ -230,10 +230,16 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
     
     title.append("text").html("Point Spread and Price").attr("text-anchor", "middle");
     
-    const specificTitle = title.append("text")
-      .attr("class", "specific-title")
+    const betTitle = title.append("text")
+      .attr("class", "bet-title")
       .attr("text-anchor", "middle")
       .style("transform", "translateY(20px)");
+
+    const betType = title
+      .append("text")
+      .attr("class", "bet-type")
+      .attr("text-anchor", "middle")
+      .style("transform", "translateY(40px)");
 
     FRAME1.selectAll(".circ").on("click", function (i, d) {
       const selected = [
@@ -269,13 +275,15 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
         point.attr("class", "circ");
         FRAME1.selectAll(".unselected").attr("class", "circ");
         directions.style("display", "block");
-        specificTitle.html("");
+        betTitle.html("");
+        betType.html("");
       } else {
         selectedData = selected;
         FRAME1.selectAll(".circ").attr("class", "unselected circ");
         point.attr("class", "selected circ");
         directions.style("display", "none");
-        specificTitle.html(`${d.home_team} @ ${d.away_team}, ${d.site_title}`)
+        betTitle.html(`${d.home_team} @ ${d.away_team}, ${d.site_title}`);
+        betType.html(`Format: ${d.bet_format}`);
         plotBars();
       }
     });
