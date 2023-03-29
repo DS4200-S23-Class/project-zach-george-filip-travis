@@ -314,19 +314,30 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
         .enter()
         .append("rect")
         .attr("y", function (d) {
-          return Y_SCALE2(Math.max(0, d.value)) + MARGINS.bottom;
+          return Y_SCALE2(0) + MARGINS.bottom;
         })
         .attr("x", function (d) {
           return X_SCALE2(d.title) + MARGINS.left;
+        })
+        .attr("height", 0)
+        .attr("width", X_SCALE2.bandwidth())
+        .attr("fill", (d) => colors_2(d.title))
+        .attr("class", "bar");
+
+      FRAME2.selectAll("rect")
+        .transition()
+        .duration(800)
+        .attr("y", function (d) {
+          return Y_SCALE2(Math.max(0, d.value)) + MARGINS.bottom;
         })
         .attr("height", function (d) {
           return Math.abs(Y_SCALE2(0) - Y_SCALE2(d.value)) === 0
             ? 1.5
             : Math.abs(Y_SCALE2(0) - Y_SCALE2(d.value));
         })
-        .attr("width", X_SCALE2.bandwidth())
-        .attr("fill", (d) => colors_2(d.title))
-        .attr("class", "bar");
+        .delay(function (d, i) {
+          return i * 100;
+        });
 
       //Add X-Axis
       FRAME2.append("g")
