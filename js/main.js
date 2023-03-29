@@ -217,23 +217,32 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
       tooltips.style("opacity", 0);
     });
 
+    const directions = FRAME2.append("text")
+      .html("Click on a point on the left to display the graph here")
+      .style("transform", "translate(100px, 100px)")
+      .attr("class", "directions");
+
     FRAME1.selectAll(".circ").on("click", function (i, d) {
       const selected = [
         {
           attribute: "point_spread_away",
           value: d.point_spread_away,
+          title: "Away Point Spread",
         },
         {
           attribute: "point_spread_home",
           value: d.point_spread_home,
+          title: "Home Point Spread",
         },
         {
           attribute: "price_away",
           value: d.price_away,
+          title: "Away Price",
         },
         {
           attribute: "price_home",
           value: d.price_home,
+          title: "Home Price",
         },
       ];
       const point = d3.select(this);
@@ -246,10 +255,12 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
         });
         point.attr("class", "circ");
         FRAME1.selectAll(".unselected").attr("class", "circ");
+        directions.style("display", "block");
       } else {
         selectedData = selected;
         FRAME1.selectAll(".circ").attr("class", "unselected circ");
         point.attr("class", "selected circ");
+        directions.style("display", "none");
         plotBars();
       }
     });
@@ -271,7 +282,7 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
         .scaleBand()
         .domain(
           selectedData.map(function (d) {
-            return d.attribute;
+            return d.title;
           })
         )
         .range([0, VIS_WIDTH])
@@ -279,7 +290,7 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
 
       let colors_2 = d3.scaleOrdinal()
       .domain(selectedData.map(d => {
-        return d.attribute;
+        return d.title;
       }))
       .range(d3.schemePaired);
 
@@ -288,35 +299,37 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
         .enter()
         .append("rect")
         .attr("y", function (d) {
-          return Y_SCALE2(Math.max(0, d.value)) + MARGINS.bottom;
+          return Y_SCALE2(Math.max(0, d.value))// + MARGINS.bottom;
         })
         .attr("x", function (d) {
-          return X_SCALE2(d.attribute) + MARGINS.left;
+          return X_SCALE2(d.title) + MARGINS.left;
         })
         .attr("height", function (d) {
-          return Math.abs(Y_SCALE2(0) - Y_SCALE2(d.value)) + 1;
+          return Math.abs(Y_SCALE2(0) - Y_SCALE2(d.value)) === 0
+            ? 1.5
+            : Math.abs(Y_SCALE2(0) - Y_SCALE2(d.value));
         })
         .attr("width", X_SCALE2.bandwidth())
-        .attr("fill", (d) => colors_2(d.attribute))
+        .attr("fill", (d) => colors_2(d.title))
         .attr("class", "bar");
 
       //Add X-Axis
       FRAME2.append("g")
         .attr(
           "transform",
-          "translate(" + MARGINS.left + "," + (VIS_HEIGHT + MARGINS.top) + ")"
+          "translate(" + MARGINS.left + "," + (VIS_HEIGHT) + ")"
         )
         .call(d3.axisBottom(X_SCALE2))
-        .attr("font-size", "20px");
+        .attr("font-size", "10px");
 
       //Add Y-Axis
       FRAME2.append("g")
         .attr(
           "transform",
-          "translate(" + MARGINS.left + "," + MARGINS.bottom + ")"
+          "translate(" + MARGINS.left + "," + 0 + ")"
         )
         .call(d3.axisLeft(Y_SCALE2))
-        .attr("font-size", "20px");
+        .attr("font-size", "15px");
 
       const tooltips = d3
         .select("#vis1")
@@ -352,8 +365,8 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
 
       const middleLine = d3.line();
       const points = [
-        [MARGINS.left, VIS_HEIGHT / 2 + MARGINS.top],
-        [VIS_WIDTH + MARGINS.right, VIS_HEIGHT / 2 + MARGINS.top],
+        [MARGINS.left, VIS_HEIGHT / 2],
+        [VIS_WIDTH + MARGINS.right, VIS_HEIGHT / 2],
       ];
 
       const pathOfLine = middleLine(points);
