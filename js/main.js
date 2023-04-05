@@ -19,6 +19,13 @@ const FRAME2 = d3
   .attr("width", FRAME_WIDTH)
   .attr("class", "frame");
 
+  const LEGEND = d3
+    .select("#vis1-legend")
+    .append("svg")
+    .attr("height", FRAME_HEIGHT)
+    .attr("width", 150)
+    .attr("class", "frame");
+
 // move vis stuff they write in here to plotData
 d3.csv("data/NBA_Bets_Today.csv").then((data) => {
   let states = [];
@@ -123,15 +130,19 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
 
     d3.select(".top").call(x_axis);
     d3.select(".left").call(y_axis);
-    
-    const xAxisGrid = d3.axisTop(x_scale)
-      .tickSize(-VIS_WIDTH)
+
+    const xAxisGrid = d3
+      .axisTop(x_scale)
+      .tickSize(-(VIS_WIDTH-MARGINS.top-(MARGINS.bottom/2)))
       .tickFormat("")
       .ticks(bookies.length);
 
-    FRAME1.append("g").attr("class", "x axis-grid").attr("transform", function (d, i) {
+    FRAME1.append("g")
+      .attr("class", "x axis-grid")
+      .attr("transform", function (d, i) {
         return `translate(0,125)`;
-      }).call(xAxisGrid);
+      })
+      .call(xAxisGrid);
 
     FRAME1.selectAll(".circ")
       .data(betData)
@@ -188,6 +199,18 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
       sim.alphaDecay(0.1);
     }, 3000);
 
+    bookies.forEach((d, i) => {
+      LEGEND.append("circle")
+        .attr("cx", 25)
+        .attr("cy", 25 + i * 25)
+        .attr("r", 10)
+        .attr("fill", colors_1(d));
+      LEGEND.append("text")
+        .attr("x", 40)
+        .attr("y", 30 + i * 25)
+        .text(d);
+    });
+
     const tooltips = d3
       .select("#vis1")
       .append("div")
@@ -236,10 +259,14 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
       .attr("class", "title")
       .style("transform", "translate(250px, 20px)")
       .attr("font-size", "15px");
-    
-    title.append("text").html("Point Spread and Price").attr("text-anchor", "middle");
-    
-    const betTitle = title.append("text")
+
+    title
+      .append("text")
+      .html("Point Spread and Price")
+      .attr("text-anchor", "middle");
+
+    const betTitle = title
+      .append("text")
       .attr("class", "bet-title")
       .attr("text-anchor", "middle")
       .style("transform", "translateY(20px)");
@@ -320,11 +347,14 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
         .range([0, VIS_WIDTH])
         .padding(0.2);
 
-      let colors_2 = d3.scaleOrdinal()
-      .domain(selectedData.map(d => {
-        return d.title;
-      }))
-      .range(d3.schemePaired);
+      let colors_2 = d3
+        .scaleOrdinal()
+        .domain(
+          selectedData.map((d) => {
+            return d.title;
+          })
+        )
+        .range(d3.schemePaired);
 
       FRAME2.selectAll("bars")
         .data(selectedData)
@@ -360,7 +390,11 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
       FRAME2.append("g")
         .attr(
           "transform",
-          "translate(" + MARGINS.left + "," + (VIS_HEIGHT + MARGINS.bottom) + ")"
+          "translate(" +
+            MARGINS.left +
+            "," +
+            (VIS_HEIGHT + MARGINS.bottom) +
+            ")"
         )
         .call(d3.axisBottom(X_SCALE2))
         .attr("font-size", "10px");
@@ -391,9 +425,7 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
       // highlight on mouseover
       FRAME2.selectAll(".bar").on("mousemove", function (i, d) {
         tooltips
-          .html(
-            d.attribute + "<br>" + d.value
-          )
+          .html(d.attribute + "<br>" + d.value)
           .style("left", i.pageX + 13 + "px")
           .style("top", i.pageY - 13 + "px");
       });
@@ -444,6 +476,9 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
     const svg = d3.select("#vis1");
     svg.selectAll("circle").remove();
     FRAME2.selectAll("text").remove();
+    FRAME1.selectAll(".axis-grid").remove();
+    LEGEND.selectAll("circle").remove();
+    LEGEND.selectAll("text").remove();
     plotData(filteredData);
   }
 });
