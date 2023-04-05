@@ -88,7 +88,7 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
 
     let y_scale = d3
       .scaleLinear()
-      .domain(d3.extent(betData.map((d) => +d["point_spread_home"])))
+      .domain(d3.extent(betData.map((d) => +d["dist_from_mean"])))
       .range([VIS_HEIGHT - MARGINS.top + 40, MARGINS.top + 40]);
 
     let colors_1 = d3.scaleOrdinal().domain(bookies).range(d3.schemePaired);
@@ -116,12 +116,12 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
       .attr("text-anchor", "middle")
       .attr("x", (VIS_WIDTH + MARGINS.left) / 2)
       .attr("y", 0)
-      .text("sportsbooks");
+      .text("Sportsbooks");
     FRAME1.append("text")
       .attr("class", "y-label")
       .attr("y", 0)
       .attr("dy", ".75em")
-      .text("distance from expected value (by odds)");
+      .text("Difference Between Average Sportsbook Spread");
 
     // add axes
     let x_axis = d3.axisTop(x_scale);
@@ -151,9 +151,9 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
       .attr("class", "circ")
       .attr("stroke", "black")
       .attr("fill", (d) => colors_1(d.site_title))
-      .attr("r", (d) => circ_size(d["point_spread_away"]))
+      .attr("r", (d) => 4)
       .attr("cx", (d) => x_scale(d.site_title))
-      .attr("cy", (d) => y_scale(d.point_spread_home) + MARGINS.top);
+      .attr("cy", (d) => y_scale(d.dist_from_mean) + MARGINS.top);
 
     let sim = d3
       .forceSimulation(betData)
@@ -170,7 +170,7 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
         "y",
         d3
           .forceY((d) => {
-            return y_scale(d.point_spread_home);
+            return y_scale(d.dist_from_mean);
           })
           .strength(1)
       )
