@@ -123,6 +123,15 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
 
     d3.select(".top").call(x_axis);
     d3.select(".left").call(y_axis);
+    
+    const xAxisGrid = d3.axisTop(x_scale)
+      .tickSize(-VIS_WIDTH)
+      .tickFormat("")
+      .ticks(bookies.length);
+
+    FRAME1.append("g").attr("class", "x axis-grid").attr("transform", function (d, i) {
+        return `translate(0,125)`;
+      }).call(xAxisGrid);
 
     FRAME1.selectAll(".circ")
       .data(betData)

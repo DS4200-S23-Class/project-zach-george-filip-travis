@@ -74,3 +74,11 @@ div.ttip_1 {
 #vis2 {
     margin-top: 50px;
 }
+
+.axis-grid line {
+    stroke: #def;
+}
+
+.axis-grid .domain {
+    display: none;
+}
