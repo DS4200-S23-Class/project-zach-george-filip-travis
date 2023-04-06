@@ -233,7 +233,7 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
             " @ " +
             d.away_team +
             ": " +
-            d.point_spread_home +
+            d.dist_from_mean +
             "<br>" +
             d.site_title
         )
