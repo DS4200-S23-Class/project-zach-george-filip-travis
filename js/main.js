@@ -425,7 +425,7 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
       // highlight on mouseover
       FRAME2.selectAll(".bar").on("mousemove", function (i, d) {
         tooltips
-          .html(d.attribute + "<br>" + d.value)
+          .html(d.title + "<br>" + d.value)
           .style("left", i.pageX + 13 + "px")
           .style("top", i.pageY - 13 + "px");
       });
