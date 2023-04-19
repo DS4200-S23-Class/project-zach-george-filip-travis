@@ -79,6 +79,22 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
   function plotData(betData) {
     console.log(betData);
 
+    FRAME1.append("rect")
+      .attr("x", MARGINS.left)
+      .attr("y", MARGINS.top * 2.5)
+      .attr("width", VIS_WIDTH + MARGINS.right)
+      .attr("height", FRAME_HEIGHT / 2 - MARGINS.bottom * 2 + 15)
+      .attr("fill", "green")
+      .style("opacity", 0.1);
+
+    FRAME1.append("rect")
+      .attr("x", MARGINS.left)
+      .attr("y", MARGINS.top * 2.5 + FRAME_HEIGHT / 2 - MARGINS.bottom * 2 + 15)
+      .attr("width", VIS_WIDTH + MARGINS.right)
+      .attr("height", FRAME_HEIGHT / 2 - MARGINS.bottom * 2 + 15)
+      .attr("fill", "red")
+      .style("opacity", 0.1);
+
     // vis1 start
     let bookies = Array.from(new Set(betData.map((d) => d.site_title)));
     let x_scale = d3
@@ -86,9 +102,16 @@ d3.csv("data/NBA_Bets_Today.csv").then((data) => {
       .domain(bookies)
       .range([MARGINS.left + 40, VIS_WIDTH + MARGINS.left + 40]);
 
+    const maxY =
+      d3.max(
+        betData.map((d) => {
+          return Math.abs(parseInt(+d["dist_from_mean"]));
+        })
+      );
+
     let y_scale = d3
       .scaleLinear()
-      .domain(d3.extent(betData.map((d) => +d["dist_from_mean"])))
+      .domain([-maxY, maxY])
       .range([VIS_HEIGHT - MARGINS.top + 40, MARGINS.top + 40]);
 
     let colors_1 = d3.scaleOrdinal().domain(bookies).range(d3.schemePaired);
